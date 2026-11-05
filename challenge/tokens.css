@@ -8,6 +8,8 @@
   --color-border: #dfe3ea;
   --color-primary: #2f5fd0;
   --color-primary-hover: #244bab;
+  --color-focus-ring: rgba(47, 95, 208, 0.25);
+  --color-highlight: #fdecb3;
 
   /* Spacing */
   --space-1: 4px;
@@ -21,9 +23,18 @@
   --font-size-body: 16px;
   --font-size-small: 14px;
   --font-size-title: 24px;
+  --font-weight-semibold: 600;
 
   /* Shape */
+  --border-width: 1px;
+  --radius-sm: 4px;
   --radius-md: 8px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 280ms;
+  --stagger-step: 30ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 body {
@@ -43,7 +54,15 @@ body {
   padding: var(--space-3);
 }
 
-.contact-name { font-weight: 600; }
+.contact-name { font-weight: var(--font-weight-semibold); }
+
+/* The part of a row that matches the search. */
+.contact-row mark {
+  background: var(--color-highlight);
+  color: inherit;
+  padding: 0;
+  border-radius: var(--radius-sm);
+}
 .contact-detail { color: var(--color-text-muted); font-size: var(--font-size-small); }
 .badge-label { color: var(--color-text-muted); font-size: var(--font-size-small); }
 
@@ -54,4 +73,85 @@ body {
 .btn-primary:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
+}
+
+/* ---------- Search ---------- */
+
+.search-field .input-group-text,
+.search-field .form-control {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+.search-field .input-group-text {
+  color: var(--color-text-muted);
+  border-right: 0;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+.search-field .form-control {
+  border-left: 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding-block: var(--space-2);
+  padding-inline-start: 0; /* The icon cell already provides the left padding. */
+}
+.search-field .form-control::placeholder { color: var(--color-text-muted); }
+
+/* Focus lands on the input, but the ring wraps the icon too, so the field reads as one control. */
+.search-field .input-group:focus-within .input-group-text,
+.search-field .input-group:focus-within .form-control {
+  border-color: var(--color-primary);
+}
+.search-field .input-group:focus-within {
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 var(--space-1) var(--color-focus-ring);
+}
+.search-field .form-control:focus { box-shadow: none; }
+
+.search-icon {
+  width: var(--font-size-body);
+  height: var(--font-size-body);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* min-height reserves the line, so the list does not jump when the count appears. */
+.search-status {
+  min-height: 1.5em;
+  margin: var(--space-2) 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+/* ---------- Empty, no-results and error states ---------- */
+
+.list-message {
+  padding: var(--space-5) var(--space-3);
+  text-align: center;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.list-message:has(.alert) { padding: 0; border: 0; background: none; }
+.list-message .alert { margin: 0; gap: var(--space-3); text-align: start; }
+.list-message-text { color: var(--color-text-muted); margin-bottom: var(--space-3); }
+
+/* ---------- Motion ---------- */
+
+/* Rows rise in once, right after loading, with a short stagger. */
+.contact-row.is-entering {
+  animation: row-enter var(--duration-base) var(--ease-out) both;
+  animation-delay: calc(var(--row-index, 0) * var(--stagger-step));
+}
+@keyframes row-enter {
+  from { opacity: 0; transform: translateY(var(--space-1)); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-row.is-entering { animation: none; }
+  .search-field .input-group-text,
+  .search-field .form-control { transition: none; }
 }

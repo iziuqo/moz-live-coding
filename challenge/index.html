@@ -14,27 +14,54 @@
       <button type="button" class="btn btn-primary">Add contact</button>
     </header>
 
-    <ul id="contact-list" class="list-group app-list"></ul>
+    <!-- Search: a real form with role="search" so screen readers list it as a landmark. -->
+    <form id="contact-search" class="search-field" role="search" novalidate>
+      <label for="search-input" class="visually-hidden">Search contacts</label>
+      <div class="input-group">
+        <span class="input-group-text" aria-hidden="true">
+          <svg class="search-icon" viewBox="0 0 16 16" focusable="false">
+            <circle cx="7" cy="7" r="5" />
+            <path d="m11 11 3.5 3.5" />
+          </svg>
+        </span>
+        <input
+          id="search-input"
+          class="form-control"
+          type="search"
+          name="q"
+          placeholder="Search by name, phone or label"
+          autocomplete="off"
+          spellcheck="false"
+          aria-controls="contact-list"
+          aria-describedby="search-status"
+          aria-keyshortcuts="/"
+        >
+      </div>
+    </form>
+
+    <!-- The visible count updates on every keystroke. The hidden live region repeats it
+         once typing pauses, so screen readers are not interrupted on each letter. -->
+    <p id="search-status" class="search-status"></p>
+    <p id="search-announcer" class="visually-hidden" role="status" aria-live="polite"></p>
+
+    <ul id="contact-list" class="list-group app-list" aria-label="Contacts" aria-busy="true"></ul>
+
+    <!-- Shown instead of the list for the empty, no-results and error states. -->
+    <div id="list-message" class="list-message" hidden></div>
   </main>
 
+  <!-- Row markup lives here, not in JS strings, and is filled with textContent (no XSS). -->
+  <template id="contact-row-template">
+    <li class="list-group-item d-flex justify-content-between align-items-center contact-row">
+      <div>
+        <div class="contact-name"></div>
+        <div class="contact-detail"></div>
+      </div>
+      <span class="badge-label"></span>
+    </li>
+  </template>
+
   <script src="data.js"></script>
-  <script>
-    // Renders the contact list
-    const list = document.getElementById('contact-list');
-
-    function render(items) {
-      items.forEach(function (c) {
-        const item = document.createElement('li');
-        item.className = 'list-group-item d-flex justify-content-between align-items-center';
-        item.innerHTML =
-          '<div><div class="contact-name">' + c.name + '</div>' +
-          '<div class="contact-detail">' + c.phone + '</div></div>' +
-          '<span class="badge-label">' + c.label + '</span>';
-        list.appendChild(item);
-      });
-    }
-
-    loadContacts().then(render);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
