@@ -1,8 +1,14 @@
 @import "tailwindcss";
+@import "../elements/moz-reveal.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Motion durations: feedback under 200ms, entrances slower and softer. */
+  --duration-fast: 150ms; /* hovers, presses, toggles */
+  --duration-base: 300ms; /* menus, popovers, small reveals */
+  --duration-slow: 600ms; /* page-level entrances */
 }
 
 @theme inline {
@@ -11,9 +17,9 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Motion tokens, mirrored from src/lib/motion.ts (powers the ease-out / ease-in-out utilities) */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Motion curves (also usable as the ease-out / ease-in-out utilities). */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* entrances: fast start, gentle landing */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* on-screen moves */
 }
 
 /* Honor the OS "reduce motion" setting for every CSS transition and animation. */

@@ -1,0 +1,40 @@
+/*
+ * <moz-reveal>: fades and lifts its content into place.
+ * Behaviour lives in moz-reveal.ts; this file is the whole look.
+ *
+ * Performance: only `opacity` and `translate` animate, so the browser runs it
+ * on the GPU compositor without layout or paint work.
+ */
+moz-reveal {
+  display: block;
+}
+
+/* Once the element is defined (JS has set its delay), play the entrance. */
+moz-reveal:defined {
+  animation: moz-reveal var(--duration-slow) var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+/*
+ * Reliability: before the script upgrades the element, keep it hidden so it
+ * never flashes. If the script fails to load, a failsafe shows it after 1.5s,
+ * and with JavaScript disabled it is simply visible from the start.
+ */
+@media (scripting: enabled) {
+  moz-reveal:not(:defined) {
+    opacity: 0;
+    animation: moz-reveal-failsafe 0s 1.5s forwards;
+  }
+}
+
+@keyframes moz-reveal {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+@keyframes moz-reveal-failsafe {
+  to {
+    opacity: 1;
+  }
+}
