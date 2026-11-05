@@ -1,0 +1,57 @@
+/* Design tokens. Replace these placeholder values with your real tokens. */
+:root {
+  /* Color */
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-text-main: #1c2230;
+  --color-text-muted: #5b6475;
+  --color-border: #dfe3ea;
+  --color-primary: #2f5fd0;
+  --color-primary-hover: #244bab;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+
+  /* Type */
+  --font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --font-size-title: 24px;
+
+  /* Shape */
+  --radius-md: 8px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+}
+
+.app-shell { max-width: 640px; padding: var(--space-5) var(--space-3); }
+.app-title { font-size: var(--font-size-title); margin: 0; }
+
+.app-list { border-radius: var(--radius-md); }
+.app-list .list-group-item {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  padding: var(--space-3);
+}
+
+.contact-name { font-weight: 600; }
+.contact-detail { color: var(--color-text-muted); font-size: var(--font-size-small); }
+.badge-label { color: var(--color-text-muted); font-size: var(--font-size-small); }
+
+.btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
